@@ -15,7 +15,6 @@ template<typename T>
 class List {
 private:
     Node<T>* head;
-
 public:
     List() : head(nullptr) {}
     ~List();
@@ -29,8 +28,53 @@ public:
     T pop_back();
     bool isEmpty() const;
     void display() const;
+    void sort();
+    T operator[](int);
+    //DANI
+    int size();
+    void clear();
+    void reverse();
 };
 
+
+template<typename T>
+int List<T>:: size(){
+    Node<T>* curr = head;
+    Node<T>* nextt = curr->next;
+    if (head == nullptr) return 0; //Manejo de caso en que la lista está vacía
+    
+    int tamanho = 1;
+    while (nextt != nullptr) { 
+        curr = nextt;
+        nextt = curr->next;
+        tamanho++;
+    }
+    return tamanho;
+}
+
+template<typename T>
+void List<T>:: clear() {
+    while (head != nullptr) {
+        Node<T>* temp = head;
+        head = head->next;
+        delete temp;
+    }
+}
+
+template<typename T>
+void List<T> :: reverse() {
+    Node<T> * prev = nullptr; //comenzamos con un prev que obviamente comenzará siendo nulo
+    Node<T> * curr = head;
+    while (curr!= nullptr) { //Manejo de caso en que la lista está vacía
+        Node<T> * nxt = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = nxt;
+    }
+    head = prev;
+}
+
+//Por qué hiciste el destructor afuera?
 template<typename T>
 List<T>::~List() {
     while (head != nullptr) {
@@ -85,7 +129,7 @@ T List<T>::back() const {
     }
     return temp->data;
 }
-
+/*
 //verificar
 template<typename T>
 T List<T>::pop_front() {
@@ -110,6 +154,7 @@ template<typename T>
 T operator [] (int i) {
 
 }
+*/
 
 template<typename T>
 void List<T>::display() const {
@@ -125,13 +170,15 @@ void List<T>::display() const {
 int main() {
     List<int> lista;
     lista.push_front(10);
-    lista.push_back(20);
-    lista.push_back(30);
+    lista.push_front(9);
 
     lista.display();  // 10 -> 20 -> 30 -> NULL
 
+
     cout << "Front: " << lista.front() << endl;  // 10
     cout << "Back: " << lista.back() << endl;    // 30
-
+    cout << "Size: " << lista.size() << endl;
+    lista.reverse();
+    cout << "Display después de reverse:\n"; lista.display();
     return 0;
 }
